@@ -4,14 +4,19 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TablePagination from "@mui/material/TablePagination"; // Import TablePagination
+import TablePagination from "@mui/material/TablePagination";
+import TextField from "@mui/material/TextField";
 import Title from "../Title";
-import axios from "axios"; // Import Axios
+import axios from "axios";
+import Grid from "@mui/material/Grid";
 
 export default function Transaction() {
   const [transactions, setTransactions] = React.useState([]);
-  const [page, setPage] = React.useState(0); // Current page
-  const [rowsPerPage, setRowsPerPage] = React.useState(5); // Rows per page
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [categoryFilter, setCategoryFilter] = React.useState(""); // Category filter
+  const [startDate, setStartDate] = React.useState(null); // Start date for date range filter
+  const [endDate, setEndDate] = React.useState(null); // End date for date range filter
 
   React.useEffect(() => {
     // Fetch userId and token from local storage
@@ -42,12 +47,68 @@ export default function Transaction() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to the first page when changing rows per page
+    setPage(0);
   };
+
+  // Filter transactions based on category and type
+  const filteredTransactions = transactions.filter((transaction) => {
+    return transaction.transactionCategory
+      .toLowerCase()
+      .includes(categoryFilter.toLowerCase());
+  });
+
+  // Filter transactions based on date range
+  const filteredByDateTransactions = filteredTransactions.filter(
+    (transaction) => {
+      if (!startDate || !endDate) {
+        return true; // No date range selected, show all transactions
+      }
+      const transactionDate = new Date(transaction.transactionDate);
+      return (
+        transactionDate >= startDate && transactionDate <= endDate.getTime()
+      );
+    }
+  );
 
   return (
     <React.Fragment>
       <Title>Transactions</Title>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            size="small"
+            label="Category Filter"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+          />
+        </Grid>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={2}>
+          <TextField
+            size="small"
+            label="Start Date"
+            type="date"
+            value={startDate ? startDate.toISOString().split("T")[0] : ""}
+            onChange={(e) => setStartDate(new Date(e.target.value))}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <TextField
+            size="small"
+            label="End Date"
+            type="date"
+            value={endDate ? endDate.toISOString().split("T")[0] : ""}
+            onChange={(e) => setEndDate(new Date(e.target.value))}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Grid>
+      </Grid>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -59,7 +120,7 @@ export default function Transaction() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {transactions
+          {filteredByDateTransactions
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((transaction, index) => (
               <TableRow key={index}>
@@ -70,7 +131,7 @@ export default function Transaction() {
                 <TableCell>{transaction.transactionCategory}</TableCell>
                 <TableCell>{transaction.transactionType}</TableCell>
                 <TableCell align="right">
-                  ${transaction.transactionAmount.toFixed(2)}
+                  INR {transaction.transactionAmount.toFixed(2)}
                 </TableCell>
               </TableRow>
             ))}
@@ -78,11 +139,11 @@ export default function Transaction() {
       </Table>
       <TablePagination
         component="div"
-        count={transactions.length}
+        count={filteredByDateTransactions.length}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage} // Enable changing rows per page
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </React.Fragment>
   );

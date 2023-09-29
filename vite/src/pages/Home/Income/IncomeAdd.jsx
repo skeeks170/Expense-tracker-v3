@@ -103,12 +103,10 @@ function IncomeAdd() {
         value={formData.incomeCategory} // Changed from formData.expenseCategory to formData.incomeCategory
         onChange={handleChange}
       >
-        <MenuItem value="furniture">Furniture</MenuItem>
-        <MenuItem value="electronics">Electronics</MenuItem>
-        <MenuItem value="clothing">Clothing</MenuItem>
-        <MenuItem value="medicines">Medicines</MenuItem>
-        <MenuItem value="bill payment">Bills</MenuItem>
-        <MenuItem value="rent">Rent</MenuItem>
+        <MenuItem value="Salary">Salary</MenuItem>
+        <MenuItem value="Freelancing">Freelancing</MenuItem>
+        <MenuItem value="Stock Market">Stock Market</MenuItem>
+        <MenuItem value="Real Estate">Real Estate</MenuItem>
       </Select>
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Add Income {/* Changed from Add Expense to Add Income */}

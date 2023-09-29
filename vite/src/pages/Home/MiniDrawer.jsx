@@ -16,8 +16,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import SpaceDashboardOutlinedIcon from "@mui/icons-material/SpaceDashboardOutlined";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -86,10 +89,10 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-// eslint-disable-next-line react/prop-types, no-unused-vars
 export default function MiniDrawer({ selected, onItemClick }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -97,6 +100,15 @@ export default function MiniDrawer({ selected, onItemClick }) {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleLogout = () => {
+    // Clear local storage
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+
+    // Redirect to the home page
+    navigate("/");
   };
 
   return (
@@ -155,11 +167,11 @@ export default function MiniDrawer({ selected, onItemClick }) {
                   }}
                 >
                   {text === "dashboard" ? (
-                    <InboxIcon />
+                    <SpaceDashboardOutlinedIcon />
                   ) : text === "expenses" ? (
-                    <MailIcon />
+                    <ShoppingCartOutlinedIcon />
                   ) : (
-                    <MailIcon />
+                    <CurrencyRupeeOutlinedIcon />
                   )}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
@@ -169,33 +181,31 @@ export default function MiniDrawer({ selected, onItemClick }) {
         </List>
         <Divider />
         <List>
-          {["project", "members"].map((text) => (
-            <ListItem
-              key={text}
-              disablePadding
-              sx={{ display: "block" }}
-              onClick={() => onItemClick(text)} // Call the onItemClick handler with the selected item
+          <ListItem
+            key="Logout"
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={handleLogout} // Call the handleLogout function when Logout is clicked
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
             >
-              <ListItemButton
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {text === "project" ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                <LogoutOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

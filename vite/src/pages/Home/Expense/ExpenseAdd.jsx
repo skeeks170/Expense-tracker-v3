@@ -101,12 +101,12 @@ function ExpenseAdd() {
         value={formData.expenseCategory}
         onChange={handleChange}
       >
-        <MenuItem value="furniture">Furniture</MenuItem>
-        <MenuItem value="electronics">Electronics</MenuItem>
-        <MenuItem value="clothing">Clothing</MenuItem>
-        <MenuItem value="medicines">Medicines</MenuItem>
-        <MenuItem value="bill payment">Bills</MenuItem>
-        <MenuItem value="rent">Rent</MenuItem>
+        <MenuItem value="Furniture">Furniture</MenuItem>
+        <MenuItem value="Electronics">Electronics</MenuItem>
+        <MenuItem value="Clothing">Clothing</MenuItem>
+        <MenuItem value="Medicines">Medicines</MenuItem>
+        <MenuItem value="Bill payment">Bills</MenuItem>
+        <MenuItem value="Rent">Rent</MenuItem>
       </Select>
 
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
