@@ -1,0 +1,17 @@
+.container-box {
+  width: 400px;
+}
+
+.button-register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 30px;
+  width: 400px;
+}
+
+.text {
+  color: aliceblue;
+  text-align: center;
+  padding-bottom: 40px;
+}

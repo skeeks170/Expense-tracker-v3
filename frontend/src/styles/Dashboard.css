@@ -1,0 +1,11 @@
+.placement {
+  display: flex;
+  align-items: left;
+  justify-content: center;
+}
+
+.table-container{
+  background: linear-gradient(90deg, #5D54A4, #7C78B8);	
+  text-align: left;
+  
+}

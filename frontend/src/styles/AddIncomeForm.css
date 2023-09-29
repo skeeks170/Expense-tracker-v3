@@ -1,0 +1,15 @@
+.Form-control {
+    margin-left: 20px;
+  }
+  
+  /* Add spacing between form elements */
+  .Form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Adjust the width of the form elements if needed */
+  .Form-control[type="text"],
+  .Form-control[type="number"],
+  .Form-control[type="date"] {
+    width: 100%;
+  }

@@ -1,0 +1,8 @@
+/* DashboardTable.css */
+.income-row {
+  background-color: #5efc82; /* Green background for income-type records */
+}
+
+.expense-row {
+  background-color: #fc5e5e; /* Red background for other records */
+}
