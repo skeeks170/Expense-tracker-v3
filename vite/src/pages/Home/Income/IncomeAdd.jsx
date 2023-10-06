@@ -107,6 +107,8 @@ function IncomeAdd() {
         <MenuItem value="Freelancing">Freelancing</MenuItem>
         <MenuItem value="Stock Market">Stock Market</MenuItem>
         <MenuItem value="Real Estate">Real Estate</MenuItem>
+
+        <MenuItem value="Real Estate">Lottery</MenuItem>
       </Select>
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Add Income {/* Changed from Add Expense to Add Income */}
