@@ -11,82 +11,66 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Title from "../Title";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 
 export default function Chart() {
+  // eslint-disable-next-line no-unused-vars
   const theme = useTheme();
-  const [incomeData, setIncomeData] = React.useState([]);
-  const [expenseData, setExpenseData] = React.useState([]);
+  const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
-    // Fetch userId and token from local storage
     const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
 
-    // Get the current month and year
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
 
-    // Define the first and last day of the current month
+    // eslint-disable-next-line no-unused-vars
     const firstDay = new Date(currentYear, currentMonth, 1);
+    // eslint-disable-next-line no-unused-vars
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
 
-    // Define the Axios configuration for the GET requests
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
 
-    // Make the GET request to fetch Income data for the current month
     axios
-      .get(`http://localhost:8080/income/list/${userId}`, config)
+      .get(
+        `http://localhost:8080/dashboard/transactionHistory/${userId}`,
+        config
+      )
       .then((response) => {
-        // Filter and transform data for Income
-        const transformedData = response.data
-          .filter((income) => {
-            const incomeDate = new Date(income.incomeDate);
-            return incomeDate >= firstDay && incomeDate <= lastDay;
-          })
+        const transactionData = response.data;
+
+        // Divide data into income and expense categories
+        const incomeData = transactionData
+          .filter((transaction) => transaction.transactionType === "Income")
           .map((income) => ({
-            name: new Date(income.incomeDate).toLocaleDateString(),
-            uv: income.incomeAmount,
+            name: new Date(income.transactionDate).toLocaleDateString(),
+            uv: income.transactionAmount,
             type: "Income",
           }));
 
-        // Sort the data by date in ascending order
-        transformedData.sort((a, b) => new Date(a.name) - new Date(b.name));
-
-        setIncomeData(transformedData);
-      })
-      .catch((error) => {
-        console.error("Error fetching income data:", error);
-      });
-
-    // Make the GET request to fetch Expense data for the current month
-    axios
-      .get(`http://localhost:8080/expense/list/${userId}`, config)
-      .then((response) => {
-        // Filter and transform data for Expense
-        const transformedData = response.data
-          .filter((expense) => {
-            const expenseDate = new Date(expense.expenseDate);
-            return expenseDate >= firstDay && expenseDate <= lastDay;
-          })
+        const expenseData = transactionData
+          .filter((transaction) => transaction.transactionType === "Expense")
           .map((expense) => ({
-            name: new Date(expense.expenseDate).toLocaleDateString(),
-            pv: -expense.expenseAmount, // Convert Expense to positive
+            name: new Date(expense.transactionDate).toLocaleDateString(),
+            pv: expense.transactionAmount,
             type: "Expense",
           }));
 
-        // Sort the data by date in ascending order
-        transformedData.sort((a, b) => new Date(a.name) - new Date(b.name));
+        // Combine and sort both income and expense data
+        const combinedData = [...incomeData, ...expenseData].sort(
+          (a, b) => new Date(a.name) - new Date(b.name)
+        );
 
-        setExpenseData(transformedData);
+        setData(combinedData);
       })
       .catch((error) => {
-        console.error("Error fetching expense data:", error);
+        console.error("Error fetching data:", error);
       });
   }, []);
 
@@ -94,14 +78,14 @@ export default function Chart() {
     <React.Fragment>
       <Title>Your Spending</Title>
       <ResponsiveContainer width="100%" height={250}>
-        <BarChart data={incomeData.concat(expenseData)}>
+        <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="pv" name="Expense" fill={theme.palette.error.main} />
-          <Bar dataKey="uv" name="Income" fill={theme.palette.primary.main} />
+          <Bar dataKey="pv" name="Expense" fill="red" />
+          <Bar dataKey="uv" name="Income" fill="blue" />
         </BarChart>
       </ResponsiveContainer>
     </React.Fragment>

@@ -32,7 +32,10 @@ export default function Transaction() {
 
     // Make the GET request to fetch data
     axios
-      .get(`http://localhost:8080/dashboard/lastFive/${userId}`, config)
+      .get(
+        `http://localhost:8080/dashboard/transactionHistory/${userId}`,
+        config
+      )
       .then((response) => {
         setTransactions(response.data);
       })
