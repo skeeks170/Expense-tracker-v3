@@ -17,8 +17,8 @@ public class DashboardRecordsController {
     @Autowired
     DashboardRecordsServices recordsServices;
 
-    @GetMapping("lastFive/{userId}")
+    @GetMapping("transactionHistory/{userId}")
     public List<DashboardRecordsDTO> fetchLastFive(@PathVariable int userId){
-        return recordsServices.getLastFiveFromDB(userId);
+        return recordsServices.getAllTransactionHistory(userId);
     }
 }

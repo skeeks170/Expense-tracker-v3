@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -89,6 +90,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+// eslint-disable-next-line react/prop-types
 export default function MiniDrawer({ selected, onItemClick }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);

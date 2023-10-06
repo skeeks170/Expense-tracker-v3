@@ -5,7 +5,6 @@ import com.payment.backend.entities.UserExpense;
 import com.payment.backend.entities.UserIncome;
 import com.payment.backend.repository.UserExpenseRepository;
 import com.payment.backend.repository.UserIncomeRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,7 @@ public class DashboardRecordsServices {
     @Autowired
     private UserExpenseRepository userExpenseRepository;
 
-    public List<DashboardRecordsDTO> getLastFiveFromDB(int userId) {
+    public List<DashboardRecordsDTO> getAllTransactionHistory(int userId) {
 
         List<UserIncome> lastFiveIncomes = userIncomeRepository
                 .findTop5ByUserMasterUserIdOrderByIncomeDateDesc(userId);
