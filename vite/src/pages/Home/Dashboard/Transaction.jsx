@@ -6,6 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography"; // Import Typography for displaying error message
 import Title from "../Title";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
@@ -67,9 +68,11 @@ export default function Transaction() {
         return true; // No date range selected, show all transactions
       }
       const transactionDate = new Date(transaction.transactionDate);
-      return (
-        transactionDate >= startDate && transactionDate <= endDate.getTime()
-      );
+      const startDateTime = startDate.getTime();
+      const endDateTime = endDate.getTime();
+
+      // Check if the transaction date is within the selected date range
+      return transactionDate >= startDateTime && transactionDate <= endDateTime;
     }
   );
 
@@ -112,6 +115,12 @@ export default function Transaction() {
           />
         </Grid>
       </Grid>
+      {/* Validation for date range */}
+      {startDate && endDate && startDate > endDate && (
+        <Typography variant="body2" color="error">
+          Start date cannot be later than end date.
+        </Typography>
+      )}
       <Table size="small">
         <TableHead>
           <TableRow>
